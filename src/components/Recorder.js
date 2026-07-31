@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { sendAudio } from "../services/api.js";
 
 function Recorder({ onResult }) {
 
@@ -8,32 +7,34 @@ function Recorder({ onResult }) {
   const audioChunks = useRef([]);
 
   const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream, {
+        mimeType: "audio/webm"
+      });
 
-    const recorder = new MediaRecorder(stream, {
-      mimeType: "audio/webm"
-    });
+      recorder.ondataavailable = (event) => {
+        audioChunks.current.push(event.data);
+      };
 
-    recorder.ondataavailable = (event) => {
-      audioChunks.current.push(event.data);
-    };
+      recorder.start();
 
-    recorder.start();
-
-    mediaRecorderRef.current = recorder;
-    setRecording(true);
+      mediaRecorderRef.current = recorder;
+      setRecording(true);
+    } catch (err) {
+      console.error("Microphone access failed during test:", err);
+    }
   };
 
   const stopRecording = () => {
+    if (!mediaRecorderRef.current || mediaRecorderRef.current.state === "inactive") return;
 
     mediaRecorderRef.current.stop();
     setRecording(false);
 
     mediaRecorderRef.current.onstop = () => {
-
       const audioBlob = new Blob(audioChunks.current, { type: "audio/webm" });
-
       audioChunks.current = [];
 
       if (!audioBlob || audioBlob.size === 0) {
@@ -42,14 +43,22 @@ function Recorder({ onResult }) {
       }
 
       console.log("Blob:", audioBlob);
-
       onResult(audioBlob);
     };
   };
 
   return (
-
     <div className="recorderBox">
+      {recording && (
+        <div className="waveContainer">
+          <div className="waveBar"></div>
+          <div className="waveBar"></div>
+          <div className="waveBar"></div>
+          <div className="waveBar"></div>
+          <div className="waveBar"></div>
+          <div className="waveBar"></div>
+        </div>
+      )}
 
       {!recording && (
         <button
@@ -62,17 +71,14 @@ function Recorder({ onResult }) {
 
       {recording && (
         <button
-          className="primaryBtn"
+          className="primaryBtn recording"
           onClick={stopRecording}
         >
           Stop Recording
         </button>
       )}
-
     </div>
-
   );
-
 }
 
 export default Recorder;

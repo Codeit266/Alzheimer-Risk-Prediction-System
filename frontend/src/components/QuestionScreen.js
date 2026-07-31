@@ -1,17 +1,17 @@
 import Recorder from "./Recorder";
 
-function QuestionScreen({questionNumber, question, onAnswer}) {
-
+function QuestionScreen({ questionNumber, question, onAnswer }) {
   return (
+    <div className="screen">
+      <h2 className="screenTitle">
+        Question {questionNumber}
+      </h2>
 
-    <div style={{textAlign:"center", marginTop:"80px"}}>
-
-      <h2>Question {questionNumber}</h2>
-
-      <p style={{fontSize:"22px"}}>{question}</p>
+      <p className="questionText">
+        {question}
+      </p>
 
       <Recorder onResult={onAnswer} />
-
     </div>
   );
 }

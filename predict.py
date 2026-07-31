@@ -1,6 +1,6 @@
 import joblib
 import pandas as pd
-from utils.parse_transcripts import extract_participant_text
+from utils.parse_transcripts import parse_cha_file
 from utils.extract_features import extract_features
 
 # load trained model
@@ -8,11 +8,11 @@ model = joblib.load("Backend/model/alzheimer_model.pkl")
 
 file_path = input("Enter transcript file path: ")
 
-# extract speech text
-text = extract_participant_text(file_path)
+# extract speech text and duration
+text, duration = parse_cha_file(file_path)
 
 # extract linguistic features
-features = extract_features(text)
+features = extract_features(text, duration=duration)
 
 columns = [
     "total_words",
@@ -22,7 +22,10 @@ columns = [
     "repetition_rate",
     "filler_count",
     "avg_sentence_length",
-    "pause_count"
+    "pause_count",
+    "short_word_ratio",
+    "punctuation_count",
+    "speaking_rate"
 ]
 
 features_df = pd.DataFrame([features], columns=columns)
@@ -40,4 +43,4 @@ if prediction == 0:
 else:
     print("Prediction: Alzheimer Risk Detected")
 
-print(f"Confidence: {confidence:.2f}%")
+print(f"Confidence: {confidence:.2f}%")

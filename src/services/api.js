@@ -2,10 +2,13 @@ import axios from "axios";
 
 const API_URL = "http://127.0.0.1:5000/analyze";
 
-export const sendAudio = async (audioBlob) => {
+export const sendAudio = async (audioBlob, question = "") => {
 
   const formData = new FormData();
   formData.append("audio", audioBlob, "audio.webm");
+  if (question) {
+    formData.append("question", question);
+  }
 
   try {
 

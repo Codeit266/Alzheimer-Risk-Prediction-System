@@ -46,6 +46,7 @@ columns = [
     "pause_count",
     "short_word_ratio",
     "punctuation_count",
+    "speaking_rate",
     "label"
 ]
 

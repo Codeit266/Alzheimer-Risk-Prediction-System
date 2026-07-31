@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
 /* GLOBAL STYLES */
 :root {
   --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --bg-color: #F3EDFC;
-  --bg-gradient: linear-gradient(135deg, #FAF7FF 0%, #F3EDFC 50%, #EADBFC 100%);
-  --card-bg: rgba(255, 255, 255, 0.55);
+  --bg-color: #ffffffdf;
+  --bg-gradient: linear-gradient(135deg, #FAF7FF 0%, #ffffff 50%, #EADBFC 100%);
+  --card-bg: #e6fff3f3;
   --card-border: rgba(83, 49, 123, 0.15);
   --card-border-hover: rgba(83, 49, 123, 0.4);
   --card-shadow: 0 20px 40px rgba(83, 49, 123, 0.08);
@@ -12,7 +14,7 @@
   --text-secondary: #3A2257;
   --text-muted: #6B3FA0;
   --primary-gradient: linear-gradient(135deg, #6B3FA0 0%, #3A2257 100%);
-  --recording-gradient: linear-gradient(135deg, #FF4B5C 0%, #FF85A1 100%);
+  --recording-gradient: linear-gradient(135deg, #e1476beb 0%, #ff2d9a 100%);
   --accent-purple: #6B3FA0;
   --accent-light: #B99FD9;
   --color-risk: #D32F2F;
@@ -99,7 +101,7 @@ body {
 /* GLOBE ICON (Top Right) */
 .globeIcon {
   position: absolute;
-  top: 8px;
+  top: 1px;
   right: 20px;
   z-index: 15;
   cursor: pointer;
@@ -134,103 +136,97 @@ body {
   will-change: transform;
 }
 
+/* c1 stays strictly on the LEFT / TOP side of the screen */
 .c1 {
   width: 550px;
   height: 550px;
-  background: radial-gradient(circle, rgba(34, 20, 50, 0.45) 0%, rgba(34, 20, 50, 0) 70%);
+  background: radial-gradient(circle, rgba(255, 82, 189, 0.961) 0%, rgba(58, 44, 72, 0) 70%);
   top: -10%;
   left: -10%;
-  animation: float1 15s infinite alternate ease-in-out;
+  /* Synced duration with c2 so they stay split perfectly over time */
+  animation: float1 24s infinite alternate ease-in-out;
 }
 
+/* c2 stays strictly on the RIGHT / BOTTOM side of the screen */
 .c2 {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(58, 34, 87, 0.5) 0%, rgba(58, 34, 87, 0) 70%);
+  background: radial-gradient(circle, rgba(92, 239, 255, 0.896) 0%, rgba(58, 34, 87, 0) 70%);
   bottom: -10%;
   right: -10%;
-  animation: float2 20s infinite alternate ease-in-out;
+  animation: float2 24s infinite alternate ease-in-out;
 }
 
-.c3 {
+/* c3 remains static in the very center as a divider anchor */
+/* .c3 {
   width: 450px;
   height: 450px;
-  background: radial-gradient(circle, rgba(83, 49, 123, 0.45) 0%, rgba(83, 49, 123, 0) 70%);
-  top: 40%;
-  left: 45%;
+  background: radial-gradient(circle, rgba(66, 11, 117, 0.714) 0%, rgba(83, 49, 123, 0) 70%);
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  animation: float3 17s infinite alternate ease-in-out;
-}
+} */
 
+/* c1 Path: Top-Left -> Mid-Left -> Top-Center -> Top-Left */
 @keyframes float1 {
   0% {
     transform: translate(0, 0) scale(1) rotate(0deg);
     border-radius: 50%;
   }
   33% {
-    transform: translate(120px, 80px) scale(1.15) rotate(120deg);
+    /* Pushes downwards along the left border only */
+    transform: translate(5vw, 45vh) scale(1.1) rotate(120deg);
     border-radius: 45% 55% 48% 52% / 50% 45% 55% 50%;
   }
   66% {
-    transform: translate(-60px, 140px) scale(0.9) rotate(240deg);
+    /* Shifts rightwards across the top border only */
+    transform: translate(45vw, 5vh) scale(0.9) rotate(240deg);
     border-radius: 55% 45% 60% 40% / 48% 55% 45% 52%;
   }
   100% {
-    transform: translate(0, 0) scale(1) rotate(360deg);
+    /* Parks at absolute upper-left corner area */
+    transform: translate(-5vw, -5vh) scale(1.05) rotate(360deg);
     border-radius: 50%;
   }
 }
 
+/* c2 Path: Bottom-Right -> Mid-Right -> Bottom-Center -> Bottom-Right */
 @keyframes float2 {
   0% {
     transform: translate(0, 0) scale(1) rotate(0deg);
     border-radius: 50%;
   }
   33% {
-    transform: translate(-140px, -90px) scale(0.85) rotate(-120deg);
+    /* Pushes upwards along the right border only */
+    transform: translate(-5vw, -45vh) scale(0.9) rotate(-120deg);
     border-radius: 55% 45% 52% 48% / 45% 52% 48% 55%;
   }
   66% {
-    transform: translate(80px, -60px) scale(1.1) rotate(-240deg);
+    /* Shifts leftwards across the bottom border only */
+    transform: translate(-45vw, -5vh) scale(1.1) rotate(-240deg);
     border-radius: 48% 52% 45% 55% / 55% 48% 52% 45%;
   }
   100% {
-    transform: translate(0, 0) scale(1) rotate(-360deg);
+    /* Parks at absolute lower-right corner area */
+    transform: translate(5vw, 5vh) scale(0.95) rotate(-360deg);
     border-radius: 50%;
   }
 }
 
-@keyframes float3 {
-  0% {
-    transform: translate(0, 0) scale(1) rotate(0deg);
-    border-radius: 50%;
-  }
-  33% {
-    transform: translate(-80px, 80px) scale(1.2) rotate(90deg);
-    border-radius: 40% 60% 50% 50% / 50% 40% 60% 50%;
-  }
-  66% {
-    transform: translate(80px, -80px) scale(0.9) rotate(180deg);
-    border-radius: 60% 40% 60% 40% / 50% 60% 40% 50%;
-  }
-  100% {
-    transform: translate(0, 0) scale(1) rotate(360deg);
-    border-radius: 50%;
-  }
-}
 
 /* GLASSMORPHIC CONTAINER CARD */
 .screen {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 28px;
-  padding: 50px 45px;
+  padding: 32px 26px;
   backdrop-filter: blur(40px) saturate(200%);
   -webkit-backdrop-filter: blur(40px) saturate(200%);
   box-shadow: var(--card-shadow);
   max-width: 700px;
   width: 100%;
   margin: auto;
+  margin-top: 100px;
   z-index: 5;
   position: relative;
   box-sizing: border-box;
@@ -253,11 +249,11 @@ body {
 .resultsWide .screenTitle,
 .resultsWide .sectionCategory,
 .resultsWide .chartTitle,
-.resultsWide .predictionTitle,
-.resultsWide .confidenceText,
+/* .resultsWide .predictionTitle, */
+/* .resultsWide .confidenceText, */
 .resultsWide .transcriptTitle,
 .resultsWide .featuresTitle {
-  color: #111111;
+  color:#6B3FA0;
 }
 
 .resultsWide table th {
@@ -324,7 +320,7 @@ body {
   }
   .resultsGrid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 24px;
   }
 }
 
@@ -341,25 +337,24 @@ body {
 
 /* SCREEN TITLE */
 .screenTitle {
-  font-size: 32px;
-  font-weight: 700;
-  margin-top: 0;
-  margin-bottom: 24px;
-  color: var(--text-primary);
-  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  font-size: 32.2px;
+  font-weight: 900;
+  margin-bottom: 14px;
+  color: rgb(70, 7, 118);
+  text-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
   text-align: center;
   letter-spacing: -0.01em;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
 /* SUBTEXT & QUESTION TEXT */
 .screenText {
   font-size: 16px;
-  line-height: 1.7;
+  line-height: 1.3;
   color: var(--text-secondary);
-  margin-top: 0;
-  margin-bottom: 36px;
-  font-weight: 400;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
 
 .questionText {
@@ -377,6 +372,7 @@ body {
   box-shadow: 0 8px 25px rgba(107, 63, 160, 0.25);
   border-radius: 50px;
   padding: 14px 48px;
+  margin-top: 24px;
   border: none;
   font-size: 16px;
   font-weight: 600;
@@ -403,9 +399,9 @@ body {
 }
 
 .primaryBtn:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 12px 28px rgba(107, 63, 160, 0.4);
-  filter: brightness(1.08);
+  transform: translateY(-1px) scale(1);
+  box-shadow: 0 12px 28px rgba(57, 12, 95, 0.946);
+  filter: brightness(1);
 }
 
 .primaryBtn:hover::after {
@@ -481,7 +477,8 @@ body {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 16px;
-  padding: 24px;
+  padding: 44px;
+  margin-bottom: 50px;
   margin: 30px auto;
   max-width: 480px;
   text-align: center;
@@ -489,14 +486,14 @@ body {
 }
 
 .predictionTitle {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 600;
   margin: 0 0 12px 0;
   color: var(--text-primary);
 }
 
 .predictionValue {
-  font-weight: 700;
+  font-weight: 900;
 }
 
 .predictionValue.risk {
@@ -512,7 +509,7 @@ body {
 }
 
 .confidenceText {
-  font-size: 16px;
+  font-size: 20px;
   color: var(--text-secondary);
   margin: 0;
   margin-top: 6px;
@@ -536,7 +533,7 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.8px;
-  color: var(--accent-purple);
+  color: black;
   margin-bottom: 8px;
   text-align: left;
 }
@@ -565,7 +562,7 @@ body {
   margin-top: 0;
   font-size: 20px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: black;
   border-bottom: 1px solid var(--card-border);
   padding-bottom: 12px;
   margin-bottom: 20px;
@@ -573,7 +570,7 @@ body {
 
 .transcriptText {
   font-size: 15px;
-  color: var(--text-secondary);
+  color: black;
   line-height: 1.65;
   margin-bottom: 16px;
   padding-left: 8px;

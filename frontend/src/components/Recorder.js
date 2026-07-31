@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { sendAudio } from "../services/api.js";
 
 function Recorder({ onResult }) {
 
@@ -8,59 +7,76 @@ function Recorder({ onResult }) {
   const audioChunks = useRef([]);
 
   const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream, {
+        mimeType: "audio/webm"
+      });
 
-    const recorder = new MediaRecorder(stream, {
-      mimeType: "audio/webm"
-    });
+      recorder.ondataavailable = (event) => {
+        audioChunks.current.push(event.data);
+      };
 
-    recorder.ondataavailable = (event) => {
-      audioChunks.current.push(event.data);
-    };
+      recorder.start();
 
-    recorder.start();
-
-    mediaRecorderRef.current = recorder;
-    setRecording(true);
-  };
-const stopRecording = () => {
-
-  mediaRecorderRef.current.stop();
-  setRecording(false);
-
-  mediaRecorderRef.current.onstop = () => {
-
-    const audioBlob = new Blob(audioChunks.current, { type: "audio/webm" });
-
-    audioChunks.current = [];
-
-    if (!audioBlob || audioBlob.size === 0) {
-      alert("Recording failed. Please try again.");
-      return;
+      mediaRecorderRef.current = recorder;
+      setRecording(true);
+    } catch (err) {
+      console.error("Microphone access failed during test:", err);
     }
-
-    console.log("Blob:", audioBlob);
-
-    // 🔥 send ONLY blob
-    onResult(audioBlob);
   };
-};
+
+  const stopRecording = () => {
+    if (!mediaRecorderRef.current || mediaRecorderRef.current.state === "inactive") return;
+
+    mediaRecorderRef.current.stop();
+    setRecording(false);
+
+    mediaRecorderRef.current.onstop = () => {
+      const audioBlob = new Blob(audioChunks.current, { type: "audio/webm" });
+      audioChunks.current = [];
+
+      if (!audioBlob || audioBlob.size === 0) {
+        alert("Recording failed. Please try again.");
+        return;
+      }
+
+      console.log("Blob:", audioBlob);
+      onResult(audioBlob);
+    };
+  };
+
   return (
-    <div style={{ marginTop: "40px" }}>
+    <div className="recorderBox">
+      {recording && (
+        <div className="waveContainer">
+          <div className="waveBar"></div>
+          <div className="waveBar"></div>
+          <div className="waveBar"></div>
+          <div className="waveBar"></div>
+          <div className="waveBar"></div>
+          <div className="waveBar"></div>
+        </div>
+      )}
 
       {!recording && (
-        <button onClick={startRecording} style={{ padding: "15px 25px" }}>
+        <button
+          className="primaryBtn"
+          onClick={startRecording}
+        >
           Start Recording
         </button>
       )}
 
       {recording && (
-        <button onClick={stopRecording} style={{ padding: "15px 25px" }}>
+        <button
+          className="primaryBtn recording"
+          onClick={stopRecording}
+        >
           Stop Recording
         </button>
       )}
-
     </div>
   );
 }

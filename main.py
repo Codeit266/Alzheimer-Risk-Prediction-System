@@ -1,16 +1,11 @@
-# from parse_transcripts import extract_participant_text
+from utils.parse_transcripts import parse_cha_file
+from utils.extract_features import extract_features
 
-# text = extract_participant_text("data/Rose.cha")
+text, duration = parse_cha_file("temp.cha")
 
-# print(text)
+print("Text:", text)
+print("Duration:", duration)
 
-from parse_transcripts import extract_participant_text
-from extract_features import extract_features
+features = extract_features(text, duration=duration)
 
-text = extract_participant_text("data/Rose.cha")
-
-print(text)
-
-features = extract_features(text)
-
-print(features)
+print("Features:", features)

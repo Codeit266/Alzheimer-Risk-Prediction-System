@@ -1,11 +1,18 @@
 import streamlit as st
 import joblib
 import pandas as pd
+import os
 
-from parse_transcripts import extract_participant_text
-from extract_features import extract_features
+from utils.parse_transcripts import parse_cha_file
+from utils.extract_features import extract_features
 
-model = joblib.load("model/alzheimer_model.pkl")
+# load trained model
+MODEL_PATH = "Backend/model/alzheimer_model.pkl"
+if os.path.exists(MODEL_PATH):
+    model = joblib.load(MODEL_PATH)
+else:
+    st.error(f"Trained model not found at {MODEL_PATH}. Please run train_model.py first.")
+    st.stop()
 
 st.title("Speech-Based Alzheimer Risk Classification")
 
@@ -16,9 +23,11 @@ if uploaded_file is not None:
     with open("temp.cha", "wb") as f:
         f.write(uploaded_file.getbuffer())
 
-    text = extract_participant_text("temp.cha")
+    # Extract speech text and duration
+    text, duration = parse_cha_file("temp.cha")
 
-    features = extract_features(text)
+    # Extract features using duration
+    features = extract_features(text, duration=duration)
 
     columns = [
         "total_words",
@@ -27,7 +36,11 @@ if uploaded_file is not None:
         "lexical_diversity",
         "repetition_rate",
         "filler_count",
-        "avg_sentence_length"
+        "avg_sentence_length",
+        "pause_count",
+        "short_word_ratio",
+        "punctuation_count",
+        "speaking_rate"
     ]
 
     features_df = pd.DataFrame([features], columns=columns)
@@ -42,3 +55,9 @@ if uploaded_file is not None:
         st.error("Prediction: Alzheimer Risk Detected")
 
     st.write(f"Confidence: {confidence:.2f}%")
+
+    st.subheader("Extracted Speech Features")
+    st.dataframe(features_df)
+
+    st.subheader("Visual Feature Comparison")
+    st.bar_chart(features_df.T)

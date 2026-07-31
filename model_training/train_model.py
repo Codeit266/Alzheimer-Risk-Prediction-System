@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -41,6 +42,7 @@ print("Accuracy:", accuracy_score(y_test, y_pred))
 print(classification_report(y_test, y_pred))
 
 # Save model
+os.makedirs("../Backend/model", exist_ok=True)
 joblib.dump(model, "../Backend/model/alzheimer_model.pkl")
 
-print("Model saved successfully!")
+print("Model saved successfully!")

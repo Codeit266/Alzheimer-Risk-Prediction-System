@@ -1,11 +1,8 @@
 import Recorder from "./Recorder";
 
 function QuestionScreen({ questionNumber, question, onAnswer }) {
-
   return (
-
     <div className="screen">
-
       <h2 className="screenTitle">
         Question {questionNumber}
       </h2>
@@ -15,11 +12,8 @@ function QuestionScreen({ questionNumber, question, onAnswer }) {
       </p>
 
       <Recorder onResult={onAnswer} />
-
     </div>
-
   );
-
 }
 
 export default QuestionScreen;
